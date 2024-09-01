@@ -1,4 +1,4 @@
-import React, { useState, KeyboardEvent } from 'react';
+import React, { useState, KeyboardEvent, ChangeEvent } from 'react';
 import styles from '../styles/TaskCard.module.css';
 import TextField from './TextField';
 import Button from './Button';
@@ -14,8 +14,10 @@ interface TaskCardProps {
   tasks: Task[];
   canAddTask?: boolean;
   onAddTask?: (taskTitle: string) => void;
-  onStartTask?: (taskIndex: number) => void;
-  onCompleteTask?: (taskIndex: number) => void;
+  onStartTask?: (taskId: number) => void;
+  onCompleteTask?: (taskId: number) => void;
+  onEditTask?: (taskId: number, newTitle: string) => void;
+  onDeleteTask?: (taskId: number) => void;
   errorMessage?: string | null;
 }
 
@@ -26,14 +28,38 @@ const TaskCard: React.FC<TaskCardProps> = ({
   onAddTask,
   onStartTask,
   onCompleteTask,
+  onEditTask,
+  onDeleteTask,
   errorMessage,
 }) => {
   const [taskInput, setTaskInput] = useState<string>('');
+  const [editTaskId, setEditTaskId] = useState<number | null>(null);
+  const [editTaskTitle, setEditTaskTitle] = useState<string>('');
 
   const handleAddTask = () => {
     if (onAddTask) {
       onAddTask(taskInput);
       setTaskInput('');
+    }
+  };
+
+  const handleEditTask = (task: Task) => {
+    setEditTaskId(task.id);
+    setEditTaskTitle(task.title);
+  };
+
+  const handleSaveEdit = () => {
+    if (onEditTask && editTaskId !== null) {
+      onEditTask(editTaskId, editTaskTitle);
+      setEditTaskId(null);
+    }
+  };
+
+  const handleDeleteTask = (taskId: number) => {
+    if (confirm('Tem certeza que deseja deletar esta tarefa?')) {
+      if (onDeleteTask) {
+        onDeleteTask(taskId);
+      }
     }
   };
 
@@ -45,16 +71,38 @@ const TaskCard: React.FC<TaskCardProps> = ({
           <p className={styles.noTasks}>No tasks available</p>
         ) : (
           tasks.map((task) => (
-            <div key={task.id} className={styles.taskItem}>
-              <div className={`${styles.task} ${styles[task.status.toLowerCase()]}`}>
-                <span>{task.title}</span>
+            <div key={task.id} className={`${styles.task} ${styles[task.status.toLowerCase()]}`}>
+              <div className={styles.taskContent}>
+                {editTaskId === task.id ? (
+                  <input
+                    type="text"
+                    value={editTaskTitle}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => setEditTaskTitle(e.target.value)}
+                    className={styles.taskInputInline}
+                    autoFocus
+                  />
+                ) : (
+                  <span>{task.title}</span>
+                )}
               </div>
-              {onStartTask && task.status === 'Todo' && (
-                <button onClick={() => onStartTask(task.id)}>Start</button>
-              )}
-              {onCompleteTask && task.status === 'Working' && (
-                <button onClick={() => onCompleteTask(task.id)}>Complete</button>
-              )}
+              <div className={styles.buttonContainer}>
+                {editTaskId === task.id ? (
+                  <button onClick={handleSaveEdit} className={styles.saveButton}>Save</button>
+                ) : (
+                  <>
+                    {task.status === 'Todo' && (
+                      <button onClick={() => handleEditTask(task)} className={styles.editButton}>Edit</button>
+                    )}
+                    {task.status === 'Todo' && (
+                      <button onClick={() => onStartTask && onStartTask(task.id)} className={styles.startButton}>Start</button>
+                    )}
+                    {task.status === 'Working' && (
+                      <button onClick={() => onCompleteTask && onCompleteTask(task.id)} className={styles.completeButton}>Complete</button>
+                    )}
+                    <button onClick={() => handleDeleteTask(task.id)} className={styles.deleteButton}>Delete</button>
+                  </>
+                )}
+              </div>
             </div>
           ))
         )}

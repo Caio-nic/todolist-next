@@ -43,6 +43,20 @@ const TaskManager: React.FC = () => {
     });
   };
 
+  const deleteAllTasks = () => {
+    if (confirm('Are you sure you want to delete all tasks?')) {
+      setTasks([]); // Limpa a lista de tarefas
+    }
+  };
+
+  const editTask = (taskId: number, newTitle: string) => {
+    setTasks(prevTasks =>
+      prevTasks.map(task =>
+        task.id === taskId ? { ...task, title: newTitle } : task
+      )
+    );
+  };
+
   return (
     <>
       <TaskCard
@@ -52,6 +66,7 @@ const TaskManager: React.FC = () => {
         onAddTask={addTask}
         onStartTask={startTask}
         onCompleteTask={completeTask}
+        onEditTask={editTask} // Passando a função de editar
         errorMessage={errorMessage}
       />
     </>

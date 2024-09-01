@@ -33,7 +33,7 @@ const Home: React.FC = () => {
   const startTask = (taskId: number) => {
     setTasks(prevTasks =>
       prevTasks.map(task =>
-        task.id === taskId ? { ...task, status: 'Working' as 'Working' } : task
+        task.id === taskId ? { ...task, status: 'Working' } : task
       )
     );
   };
@@ -41,7 +41,15 @@ const Home: React.FC = () => {
   const completeTask = (taskId: number) => {
     setTasks(prevTasks =>
       prevTasks.map(task =>
-        task.id === taskId ? { ...task, status: 'Done' as 'Done' } : task
+        task.id === taskId ? { ...task, status: 'Done' } : task
+      )
+    );
+  };
+
+  const editTask = (taskId: number, newTitle: string) => {
+    setTasks(prevTasks =>
+      prevTasks.map(task =>
+        task.id === taskId ? { ...task, title: newTitle } : task
       )
     );
   };
@@ -57,6 +65,7 @@ const Home: React.FC = () => {
             onAddTask={addTask}
             onStartTask={startTask}
             onCompleteTask={completeTask}
+            onEditTask={editTask} // Função de edição de tarefa
             errorMessage={errorMessage}
           />
         </div>
@@ -66,4 +75,5 @@ const Home: React.FC = () => {
 };
 
 export default Home;
+
 
