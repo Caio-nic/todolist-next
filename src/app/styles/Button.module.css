@@ -1,0 +1,41 @@
+.container {
+  display: inline-block;
+  width: 150px; 
+  padding: 15px 20px; 
+  font-weight: 600;
+  text-align: center;
+  color: #ffffff;
+  background-color: #f33219; 
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+
+.container:hover,
+.container:focus {
+  background-color: #b62c1a; 
+  outline: none;
+}
+
+.container:active {
+  transform: scale(0.98);
+}
+
+.container:disabled {
+  background-color: #f07f70;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.title {
+  font-size: 20px;
+  margin: 0;
+  padding: 0;
+}
+
+
+
