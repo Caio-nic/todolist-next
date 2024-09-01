@@ -62,6 +62,39 @@
   align-items: center; /* Centraliza verticalmente */
 }
 
+.taskContent input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  appearance: none; /* Remove o estilo padrão do checkbox */
+  background-color: white; /* Fundo branco */
+  border: 2px solid #ccc; /* Borda do checkbox */
+  border-radius: 4px; /* Arredondar as bordas */
+  cursor: pointer;
+  outline: none; /* Remove o contorno ao clicar */
+  margin-right: 10px; /* Espaço entre checkbox e texto */
+  position: relative; /* Para que o 'X' apareça em relação à checkbox */
+}
+
+.taskContent input[type="checkbox"]:checked {
+  background-color: #fff; /* Mantém o fundo branco quando marcado */
+  border-color: #2196f3; /* Cor da borda quando selecionado */
+}
+
+.taskContent input[type="checkbox"]:checked::after {
+  content: "X"; /* Exibe um 'X' quando a checkbox está marcada */
+  position: absolute;
+  left: 0; /* Ajuste a posição do 'X' para ficar centralizado */
+  top: 0; /* Alinha verticalmente o 'X' */
+  width: 100%; /* Faz o 'X' ocupar toda a largura da checkbox */
+  height: 100%; /* Faz o 'X' ocupar toda a altura da checkbox */
+  display: flex; /* Usar flexbox para centralizar o 'X' */
+  justify-content: center; /* Centraliza horizontalmente */
+  align-items: center; /* Centraliza verticalmente */
+  font-size: 16px; /* Tamanho do 'X' */
+  color: #2196f3; /* Cor do 'X' */
+  font-weight: bold; /* Deixa o 'X' em negrito */
+}
+
 .buttonContainer {
   display: flex;
   align-items: center; /* Centraliza os botões verticalmente */
@@ -177,11 +210,10 @@
   outline: none;
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
 }
+
 .deleteAllButton {
   margin-bottom: 16px;
   background-color: #ff4d4d; 
   color: white; 
 }
-
-
 

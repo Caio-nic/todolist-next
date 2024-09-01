@@ -43,14 +43,6 @@ const TaskManager: React.FC = () => {
     );
   };
 
-  const deleteTask = (taskId: number) => {
-    setTasks(prevTasks => prevTasks.filter(task => task.id !== taskId));
-  };
-
-  const deleteAllTasks = () => {
-    setTasks([]); // Limpa a lista de tarefas
-  };
-
   const editTask = (taskId: number, newTitle: string) => {
     setTasks(prevTasks =>
       prevTasks.map(task =>
@@ -59,19 +51,24 @@ const TaskManager: React.FC = () => {
     );
   };
 
+  const deleteSelectedTasks = (taskIds: number[]) => {
+    setTasks(prevTasks => prevTasks.filter(task => !taskIds.includes(task.id))); // Remove as tarefas selecionadas
+  };
+
   return (
-    <TaskCard
-      title="Tasks"
-      tasks={tasks}
-      canAddTask={true}
-      onAddTask={addTask}
-      onStartTask={startTask}
-      onCompleteTask={completeTask}
-      onEditTask={editTask}
-      onDeleteTask={deleteTask}
-      onDeleteAllTasks={deleteAllTasks} // Passando a função deleteAllTasks para o TaskCard
-      errorMessage={errorMessage}
-    />
+    <>
+      <TaskCard
+        title="Tasks"
+        tasks={tasks}
+        canAddTask={true}
+        onAddTask={addTask}
+        onStartTask={startTask}
+        onCompleteTask={completeTask}
+        onEditTask={editTask}
+        onDeleteSelectedTasks={deleteSelectedTasks} // Passando a função para deletar tarefas selecionadas
+        errorMessage={errorMessage}
+      />
+    </>
   );
 };
 

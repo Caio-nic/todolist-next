@@ -36,6 +36,8 @@
   margin: 0;
   padding: 0;
 }
-
-
-
+.disabled {
+  background-color: #cccccc; /* Cor de fundo para botão desativado */
+  color: #666666; /* Cor do texto para botão desativado */
+  pointer-events: none; /* Impede qualquer interação com o botão */
+}
