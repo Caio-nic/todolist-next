@@ -177,6 +177,11 @@
   outline: none;
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
 }
+.deleteAllButton {
+  margin-bottom: 16px;
+  background-color: #ff4d4d; 
+  color: white; 
+}
 
 
 

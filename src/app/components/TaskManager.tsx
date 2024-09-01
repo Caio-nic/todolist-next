@@ -47,6 +47,10 @@ const TaskManager: React.FC = () => {
     setTasks(prevTasks => prevTasks.filter(task => task.id !== taskId));
   };
 
+  const deleteAllTasks = () => {
+    setTasks([]); // Limpa a lista de tarefas
+  };
+
   const editTask = (taskId: number, newTitle: string) => {
     setTasks(prevTasks =>
       prevTasks.map(task =>
@@ -64,7 +68,8 @@ const TaskManager: React.FC = () => {
       onStartTask={startTask}
       onCompleteTask={completeTask}
       onEditTask={editTask}
-      onDeleteTask={deleteTask} // Passando a função deleteTask para o TaskCard
+      onDeleteTask={deleteTask}
+      onDeleteAllTasks={deleteAllTasks} // Passando a função deleteAllTasks para o TaskCard
       errorMessage={errorMessage}
     />
   );

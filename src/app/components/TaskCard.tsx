@@ -18,6 +18,7 @@ interface TaskCardProps {
   onCompleteTask?: (taskId: number) => void;
   onEditTask?: (taskId: number, newTitle: string) => void;
   onDeleteTask?: (taskId: number) => void;
+  onDeleteAllTasks?: () => void; // Nova prop para deletar todas as tarefas
   errorMessage?: string | null;
 }
 
@@ -30,6 +31,7 @@ const TaskCard: React.FC<TaskCardProps> = ({
   onCompleteTask,
   onEditTask,
   onDeleteTask,
+  onDeleteAllTasks, // Nova prop
   errorMessage,
 }) => {
   const [taskInput, setTaskInput] = useState<string>('');
@@ -58,7 +60,7 @@ const TaskCard: React.FC<TaskCardProps> = ({
   const handleDeleteTask = (taskId: number) => {
     if (confirm('Tem certeza que deseja deletar esta tarefa?')) {
       if (onDeleteTask) {
-        onDeleteTask(taskId);
+        onDeleteTask(taskId); // Chama a função de exclusão passada como prop
       }
     }
   };
@@ -66,6 +68,18 @@ const TaskCard: React.FC<TaskCardProps> = ({
   return (
     <div className={styles.taskCard}>
       <h2 className={styles.title}>{title}</h2>
+      
+      {/* Botão para deletar todas as tarefas */}
+      <Button
+        onClick={() => {
+          if (confirm('Tem certeza que deseja deletar todas as tarefas?')) {
+            onDeleteAllTasks && onDeleteAllTasks();
+          }
+        }}
+        titleButton="Delete All Tasks"
+        className={styles.deleteAllButton} // Adicione uma classe para estilizar se necessário
+      />
+
       <div className={styles.tasks}>
         {tasks.length === 0 ? (
           <p className={styles.noTasks}>No tasks available</p>
