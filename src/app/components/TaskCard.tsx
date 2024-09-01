@@ -121,7 +121,7 @@ const TaskCard: React.FC<TaskCardProps> = ({
               }
             }}
           />
-          <Button onClick={handleAddTask} titleButton='Add'/>
+          <Button onClick={handleAddTask} titleButton='Add' />
         </div>
       )}
       {errorMessage && (

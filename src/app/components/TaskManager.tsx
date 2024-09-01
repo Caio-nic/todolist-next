@@ -27,26 +27,24 @@ const TaskManager: React.FC = () => {
     setErrorMessage(null);
   };
 
-  const startTask = (index: number) => {
-    setTasks(prevTasks => {
-      const updatedTasks = [...prevTasks];
-      updatedTasks[index].status = 'Working';
-      return updatedTasks;
-    });
+  const startTask = (taskId: number) => {
+    setTasks(prevTasks =>
+      prevTasks.map(task =>
+        task.id === taskId ? { ...task, status: 'Working' } : task
+      )
+    );
   };
 
-  const completeTask = (index: number) => {
-    setTasks(prevTasks => {
-      const updatedTasks = [...prevTasks];
-      updatedTasks[index].status = 'Done';
-      return updatedTasks;
-    });
+  const completeTask = (taskId: number) => {
+    setTasks(prevTasks =>
+      prevTasks.map(task =>
+        task.id === taskId ? { ...task, status: 'Done' } : task
+      )
+    );
   };
 
-  const deleteAllTasks = () => {
-    if (confirm('Are you sure you want to delete all tasks?')) {
-      setTasks([]); // Limpa a lista de tarefas
-    }
+  const deleteTask = (taskId: number) => {
+    setTasks(prevTasks => prevTasks.filter(task => task.id !== taskId));
   };
 
   const editTask = (taskId: number, newTitle: string) => {
@@ -58,18 +56,17 @@ const TaskManager: React.FC = () => {
   };
 
   return (
-    <>
-      <TaskCard
-        title="Tasks"
-        tasks={tasks}
-        canAddTask={true}
-        onAddTask={addTask}
-        onStartTask={startTask}
-        onCompleteTask={completeTask}
-        onEditTask={editTask} // Passando a função de editar
-        errorMessage={errorMessage}
-      />
-    </>
+    <TaskCard
+      title="Tasks"
+      tasks={tasks}
+      canAddTask={true}
+      onAddTask={addTask}
+      onStartTask={startTask}
+      onCompleteTask={completeTask}
+      onEditTask={editTask}
+      onDeleteTask={deleteTask} // Passando a função deleteTask para o TaskCard
+      errorMessage={errorMessage}
+    />
   );
 };
 
