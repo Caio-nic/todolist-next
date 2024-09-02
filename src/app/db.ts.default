@@ -1,0 +1,11 @@
+import mysql from 'mysql2/promise';
+
+export async function createConnection() {
+    const connection = await mysql.createConnection({
+    host: 'localhost', // seu host
+    user: 'seu_usuario', // seu usuário do MySQL
+    password: 'sua_senha', // sua senha do MySQL
+    database: 'nome_do_banco', // nome do seu banco de dados
+    });
+    return connection;
+}

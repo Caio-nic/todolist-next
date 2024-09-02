@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import TaskCard from './TaskCard';
 import { Task } from '../../types';
 
@@ -6,74 +6,138 @@ const TaskManager: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const addTask = (taskTitle: string) => {
+  // Função para buscar tarefas da API
+  const fetchTasks = async () => {
+    const response = await fetch('http://localhost:3000/api/tasks');
+    const data = await response.json();
+    setTasks(data);
+  };
+
+  // Efeito para buscar tarefas na inicialização
+  useEffect(() => {
+    fetchTasks();
+  }, []);
+
+  const addTask = async (taskTitle: string) => {
     if (taskTitle.length < 5 || taskTitle.length > 30) {
       setErrorMessage('A tarefa deve ter entre 5 e 30 caracteres.');
       return;
     }
 
     const newTask: Task = {
-      id: Date.now(),
+      id: Date.now(), // O ID será gerado pelo banco de dados
       title: taskTitle,
       status: 'Todo',
     };
 
-    setTasks([...tasks, newTask]);
-    setErrorMessage(null);
-  };
-
-  const startTask = (taskId: number) => {
-    setTasks(prevTasks =>
-      prevTasks.map(task =>
-        task.id === taskId ? { ...task, status: 'Working' } : task
-      )
-    );
-  };
-
-  const completeTask = (taskId: number) => {
-    setTasks(prevTasks =>
-      prevTasks.map(task =>
-        task.id === taskId ? { ...task, status: 'Done' } : task
-      )
-    );
-  };
-
-  const deleteTask = (taskId: number) => {
-    const task = tasks.find((task) => task.id === taskId);
-    if (task && (task.status === 'Todo' || task.status === 'Working')) {
-      setTasks(prevTasks => prevTasks.filter(task => task.id !== taskId));
-    } else {
-      alert('Você só pode deletar tarefas com status "Todo" ou "Working".');
-    }
-  };
-
-  const deleteSelectedTasks = (taskIds: number[]) => {
-    const deletableTasks = taskIds.filter((taskId) => {
-      const task = tasks.find((task) => task.id === taskId);
-      return task && (task.status === 'Todo' || task.status === 'Working');
+    // Enviar a nova tarefa para a API
+    const response = await fetch('http://localhost:3000/api/tasks', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ title: taskTitle }),
     });
 
-    if (deletableTasks.length > 0) {
-      if (confirm(`Tem certeza que deseja deletar as tarefas selecionadas?`)) {
-        setTasks(prevTasks => prevTasks.filter(task => !deletableTasks.includes(task.id)));
-      }
+    if (response.ok) {
+      const createdTask = await response.json();
+      setTasks([...tasks, createdTask]);
+      setErrorMessage(null);
     } else {
-      alert('Nenhuma tarefa selecionada pode ser deletada. Apenas tarefas com status "Todo" ou "Working" podem ser removidas.');
+      setErrorMessage('Erro ao adicionar a tarefa.');
     }
   };
 
-  const editTask = (taskId: number, newTitle: string) => {
-    setTasks(prevTasks =>
-      prevTasks.map(task =>
-        task.id === taskId ? { ...task, title: newTitle } : task
-      )
-    );
+  const startTask = async (taskId: number) => {
+    // Atualiza a tarefa no banco de dados e no estado
+    await updateTaskStatus(taskId, 'Working');
+  };
+
+  const completeTask = async (taskId: number) => {
+    // Atualiza a tarefa no banco de dados e no estado
+    await updateTaskStatus(taskId, 'Done');
+  };
+
+  const updateTaskStatus = async (taskId: number, status: 'Working' | 'Done') => {
+    const task = tasks.find(t => t.id === taskId);
+    if (task) {
+      const updatedTask = { ...task, status };
+
+      // Atualizar no banco de dados
+      const response = await fetch(`http://localhost:3000/api/tasks`, {
+        method: 'PUT', // Certifique-se de que a API tenha um endpoint para PUT
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedTask),
+      });
+
+      if (response.ok) {
+        setTasks(prevTasks => 
+          prevTasks.map(t => (t.id === taskId ? updatedTask : t))
+        );
+      }
+    }
+  };
+
+  const deleteTask = async (taskId: number) => {
+    const response = await fetch(`http://localhost:3000/api/tasks`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ id: taskId }),
+    });
+
+    if (response.ok) {
+      setTasks(prevTasks => prevTasks.filter(task => task.id !== taskId));
+    } else {
+      alert('Erro ao deletar a tarefa.');
+    }
+  };
+
+  const deleteSelectedTasks = async (taskIds: number[]) => {
+    const response = await fetch(`http://localhost:3000/api/tasks`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ ids: taskIds }),
+    });
+
+    if (response.ok) {
+      setTasks(prevTasks => prevTasks.filter(task => !taskIds.includes(task.id)));
+    } else {
+      alert('Erro ao deletar tarefas selecionadas.');
+    }
+  };
+
+  const editTask = async (taskId: number, newTitle: string) => {
+    const task = tasks.find(t => t.id === taskId);
+    if (task) {
+      const updatedTask = { ...task, title: newTitle };
+
+      // Atualizar no banco de dados
+      const response = await fetch(`http://localhost:3000/api/tasks`, {
+        method: 'PUT', // Certifique-se de que a API tenha um endpoint para PUT
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedTask),
+      });
+
+      if (response.ok) {
+        setTasks(prevTasks => 
+          prevTasks.map(t => (t.id === taskId ? updatedTask : t))
+        );
+      }
+    }
   };
 
   return (
     <div>
       <TaskCard
-        title="Task Manager"
+        title="Tasks"
         tasks={tasks}
         canAddTask={true}
         onAddTask={addTask}

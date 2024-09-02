@@ -20,7 +20,7 @@ const TextField: React.FC<TextFieldProps> = ({
 }) => {
   return (
     <input
-      className={`${styles.container} ${className || ''}`}
+      className={styles.container}
       type={type}
       placeholder={placeholder}
       onChange={onChange}
