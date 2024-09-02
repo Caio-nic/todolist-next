@@ -8,7 +8,7 @@
   transition: box-shadow 0.3s ease;
   overflow: auto;
   position: relative;
-  gap: 20px; /* Menos espaço entre as tarefas */
+  gap: 20px; 
 }
 
 .taskCard:hover {
@@ -29,13 +29,13 @@
 .tasks {
   display: flex;
   flex-direction: column;
-  gap: 12px; /* Espaçamento entre as tarefas */
+  gap: 12px; 
 }
 
 .task {
-  display: flex; /* Usar flexbox para alinhar itens */
-  justify-content: space-between; /* Espaçar o conteúdo para os lados */
-  align-items: center; /* Centralizar verticalmente */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   padding: 15px;
@@ -45,60 +45,60 @@
 }
 
 .task.todo {
-  background-color: #e3f2fd; /* Azul claro para Todo */
+  background-color: #e3f2fd; 
 }
 
 .task.working {
-  background-color: #fff3e0; /* Laranja claro para Working */
+  background-color: #fff3e0; 
 }
 
 .task.done {
-  background-color: #e8f5e9; /* Verde claro para Done */
+  background-color: #e8f5e9; 
 }
 
 .taskContent {
-  flex: 1; /* Para ocupar o espaço disponível */
-  display: flex; /* Usar flexbox para alinhamento */
-  align-items: center; /* Centraliza verticalmente */
+  flex: 1; 
+  display: flex; 
+  align-items: center; 
 }
 
 .taskContent input[type="checkbox"] {
   width: 20px;
   height: 20px;
-  appearance: none; /* Remove o estilo padrão do checkbox */
-  background-color: white; /* Fundo branco */
-  border: 2px solid #ccc; /* Borda do checkbox */
-  border-radius: 4px; /* Arredondar as bordas */
+  appearance: none; 
+  background-color: white; 
+  border: 2px solid #ccc; 
+  border-radius: 4px; 
   cursor: pointer;
-  outline: none; /* Remove o contorno ao clicar */
-  margin-right: 10px; /* Espaço entre checkbox e texto */
-  position: relative; /* Para que o 'X' apareça em relação à checkbox */
+  outline: none; 
+  margin-right: 10px; 
+  position: relative; 
 }
 
 .taskContent input[type="checkbox"]:checked {
-  background-color: #fff; /* Mantém o fundo branco quando marcado */
-  border-color: #2196f3; /* Cor da borda quando selecionado */
+  background-color: #fff; 
+  border-color: #2196f3; 
 }
 
 .taskContent input[type="checkbox"]:checked::after {
-  content: "X"; /* Exibe um 'X' quando a checkbox está marcada */
+  content: "X"; 
   position: absolute;
-  left: 0; /* Ajuste a posição do 'X' para ficar centralizado */
-  top: 0; /* Alinha verticalmente o 'X' */
-  width: 100%; /* Faz o 'X' ocupar toda a largura da checkbox */
-  height: 100%; /* Faz o 'X' ocupar toda a altura da checkbox */
-  display: flex; /* Usar flexbox para centralizar o 'X' */
-  justify-content: center; /* Centraliza horizontalmente */
-  align-items: center; /* Centraliza verticalmente */
-  font-size: 16px; /* Tamanho do 'X' */
-  color: #2196f3; /* Cor do 'X' */
-  font-weight: bold; /* Deixa o 'X' em negrito */
+  left: 0; 
+  top: 0; 
+  width: 100%; 
+  height: 100%; 
+  display: flex; 
+  justify-content: center; 
+  align-items: center; 
+  font-size: 16px; 
+  color: #2196f3; 
+  font-weight: bold; 
 }
 
 .buttonContainer {
   display: flex;
-  align-items: center; /* Centraliza os botões verticalmente */
-  gap: 8px; /* Espaço entre os botões */
+  align-items: center; 
+  gap: 8px; 
 }
 
 .startButton,
@@ -113,7 +113,7 @@
 }
 
 .startButton {
-  background-color: #2196f3; /* Azul para Start */
+  background-color: #2196f3; 
   color: white;
 }
 
@@ -122,7 +122,7 @@
 }
 
 .completeButton {
-  background-color: #4caf50; /* Verde para Complete */
+  background-color: #4caf50; 
   color: white;
 }
 
@@ -131,7 +131,7 @@
 }
 
 .editButton {
-  background-color: #ff9800; /* Laranja para Edit */
+  background-color: #ff9800; 
   color: white;
 }
 
@@ -140,7 +140,7 @@
 }
 
 .saveButton {
-  background-color: #4caf50; /* Verde para Save */
+  background-color: #4caf50; 
   color: white;
 }
 
@@ -149,7 +149,7 @@
 }
 
 .deleteButton {
-  background-color: #f44336; /* Vermelho para Delete */
+  background-color: #f44336; 
   color: white;
 }
 
@@ -212,21 +212,23 @@
 }
 
 .deleteAllButton {
+  /* padding: 20px; */
+  border-radius: 10px;
   margin-bottom: 16px;
-  background-color: #ff4d4d; 
+  background-color: #d1d1d1; 
   color: white; 
 }
 
 .disabled {
-  opacity: 0.5; /* Reduz a opacidade para indicar desabilitado */
-  cursor: not-allowed; /* Alterar o cursor para indicar que não pode ser clicado */
-  background-color: #666866; /* Cor de fundo para botões desabilitados */
-  color: #ffffff; /* Cor do texto para botões desabilitados */
+  opacity: 0.5; 
+  cursor: not-allowed; 
+  background-color: #666866; 
+  color: #ffffff; 
 }
 
-
 .checkbox:disabled {
-  background-color: #a85656; /* Cor de fundo diferente para checkbox desabilitado */
-  border: 1px solid #ccc; /* Cor da borda para checkbox desabilitado */
-  cursor: not-allowed; /* Indicar que não pode ser interagido */
+  background-color: #a85656; 
+  border: 1px solid #ccc; 
+  cursor: not-allowed; 
+  pointer-events: none; 
 }

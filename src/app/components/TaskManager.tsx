@@ -6,14 +6,12 @@ const TaskManager: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  // Função para buscar tarefas da API
   const fetchTasks = async () => {
     const response = await fetch('http://localhost:3000/api/tasks');
     const data = await response.json();
     setTasks(data);
   };
 
-  // Efeito para buscar tarefas na inicialização
   useEffect(() => {
     fetchTasks();
   }, []);
@@ -25,12 +23,11 @@ const TaskManager: React.FC = () => {
     }
 
     const newTask: Task = {
-      id: Date.now(), // O ID será gerado pelo banco de dados
+      id: Date.now(), 
       title: taskTitle,
       status: 'Todo',
     };
 
-    // Enviar a nova tarefa para a API
     const response = await fetch('http://localhost:3000/api/tasks', {
       method: 'POST',
       headers: {
@@ -49,12 +46,10 @@ const TaskManager: React.FC = () => {
   };
 
   const startTask = async (taskId: number) => {
-    // Atualiza a tarefa no banco de dados e no estado
     await updateTaskStatus(taskId, 'Working');
   };
 
   const completeTask = async (taskId: number) => {
-    // Atualiza a tarefa no banco de dados e no estado
     await updateTaskStatus(taskId, 'Done');
   };
 
@@ -63,9 +58,8 @@ const TaskManager: React.FC = () => {
     if (task) {
       const updatedTask = { ...task, status };
 
-      // Atualizar no banco de dados
       const response = await fetch(`http://localhost:3000/api/tasks`, {
-        method: 'PUT', // Certifique-se de que a API tenha um endpoint para PUT
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -117,9 +111,8 @@ const TaskManager: React.FC = () => {
     if (task) {
       const updatedTask = { ...task, title: newTitle };
 
-      // Atualizar no banco de dados
       const response = await fetch(`http://localhost:3000/api/tasks`, {
-        method: 'PUT', // Certifique-se de que a API tenha um endpoint para PUT
+        method: 'PUT', 
         headers: {
           'Content-Type': 'application/json',
         },
@@ -135,7 +128,7 @@ const TaskManager: React.FC = () => {
   };
 
   return (
-    <div>
+    <>
       <TaskCard
         title="Tasks"
         tasks={tasks}
@@ -148,7 +141,7 @@ const TaskManager: React.FC = () => {
         onDeleteSelectedTasks={deleteSelectedTasks}
         errorMessage={errorMessage}
       />
-    </div>
+    </>
   );
 };
 

@@ -2,7 +2,7 @@ import React, { useState, ChangeEvent } from 'react';
 import styles from '../styles/TaskCard.module.css';
 import TextField from './TextField';
 import Button from './Button';
-import { Task, TaskCardProps } from '../../types'; // Importando as interfaces
+import { Task, TaskCardProps } from '../../types';
 
 const TaskCard: React.FC<TaskCardProps> = ({
   title,
@@ -65,12 +65,11 @@ const TaskCard: React.FC<TaskCardProps> = ({
       return task && (task.status === 'Todo' || task.status === 'Working');
     });
 
-    // Apenas confirma a deleção uma vez
     if (deletableTasks.length > 0) {
       const confirmed = confirm('Tem certeza que deseja deletar as tarefas selecionadas?');
       if (confirmed) {
         onDeleteSelectedTasks && onDeleteSelectedTasks(deletableTasks);
-        setSelectedTasks([]); // Limpa a seleção após a deleção
+        setSelectedTasks([]);
       }
     } else {
       alert('Nenhuma tarefa selecionada pode ser deletada. Apenas tarefas com status "Todo" ou "Working" podem ser removidas.');
@@ -92,7 +91,7 @@ const TaskCard: React.FC<TaskCardProps> = ({
                   checked={selectedTasks.includes(task.id)}
                   onChange={() => handleSelectTask(task.id)}
                   className={styles.checkbox}
-                  disabled={task.status === 'Done'} // Desabilita a checkbox se a tarefa estiver "Done"
+                  disabled={task.status === 'Done'}
                 />
                 {editTaskId === task.id ? (
                   <input
@@ -111,6 +110,9 @@ const TaskCard: React.FC<TaskCardProps> = ({
                   <button onClick={handleSaveEdit} className={styles.saveButton}>Save</button>
                 ) : (
                   <>
+                      {task.status !== 'Done' && (
+                        <button onClick={() => handleDeleteTask(task.id)} className={styles.deleteButton}>Delete</button>
+                      )}
                     {task.status === 'Todo' && (
                       <button onClick={() => handleEditTask(task)} className={styles.editButton}>Edit</button>
                     )}
@@ -119,9 +121,6 @@ const TaskCard: React.FC<TaskCardProps> = ({
                     )}
                     {task.status === 'Working' && (
                       <button onClick={() => onCompleteTask && onCompleteTask(task.id)} className={styles.completeButton}>Complete</button>
-                    )}
-                    {task.status !== 'Done' && ( // Mostra o botão de deletar apenas se não estiver Done
-                      <button onClick={() => handleDeleteTask(task.id)} className={styles.deleteButton}>Delete</button>
                     )}
                   </>
                 )}
@@ -147,13 +146,13 @@ const TaskCard: React.FC<TaskCardProps> = ({
           <Button onClick={handleAddTask} titleButton="Add" />
         </div>
       )}
-      <button
+      <Button
         onClick={handleDeleteSelectedTasks}
         className={`${styles.deleteAllButton} ${selectedTasks.length === 0 ? styles.disabled : ''}`}
         disabled={selectedTasks.length === 0}
-      >
-        Delete Selected Tasks
-      </button>
+        titleButton='Delete Selected Tasks'
+      />
+      
       {errorMessage && (
         <div className={styles.errorMessage}>{errorMessage}</div>
       )}

@@ -1,7 +1,6 @@
 .container {
   display: flex;
   height: 100vh;
-  background-image: url("../assets/images/background3.avif");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
