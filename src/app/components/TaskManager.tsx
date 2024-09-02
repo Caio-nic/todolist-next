@@ -101,7 +101,7 @@ const TaskManager: React.FC = () => {
       },
       body: JSON.stringify({ ids: taskIds }),
     });
-
+    //confuso esse ! devio ao delete
     if (response.ok) {
       setTasks((prevTasks) =>
         prevTasks.filter((task) => !taskIds.includes(task.id))

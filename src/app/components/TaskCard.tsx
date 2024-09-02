@@ -1,8 +1,8 @@
-import React, { useState, ChangeEvent } from 'react';
-import styles from '../styles/TaskCard.module.css';
-import TextField from './TextField';
-import Button from './Button';
-import { Task, TaskCardProps } from '../../types';
+import React, { useState, ChangeEvent } from "react";
+import styles from "../styles/TaskCard.module.css";
+import TextField from "./TextField";
+import Button from "./Button";
+import { Task, TaskCardProps } from "../../types";
 
 const TaskCard: React.FC<TaskCardProps> = ({
   title,
@@ -16,15 +16,15 @@ const TaskCard: React.FC<TaskCardProps> = ({
   onDeleteSelectedTasks,
   errorMessage,
 }) => {
-  const [taskInput, setTaskInput] = useState<string>('');
+  const [taskInput, setTaskInput] = useState<string>("");
   const [editTaskId, setEditTaskId] = useState<number | null>(null);
-  const [editTaskTitle, setEditTaskTitle] = useState<string>('');
+  const [editTaskTitle, setEditTaskTitle] = useState<string>("");
   const [selectedTasks, setSelectedTasks] = useState<number[]>([]);
 
   const handleAddTask = () => {
     if (onAddTask) {
       onAddTask(taskInput);
-      setTaskInput('');
+      setTaskInput("");
     }
   };
 
@@ -42,8 +42,8 @@ const TaskCard: React.FC<TaskCardProps> = ({
 
   const handleDeleteTask = (taskId: number) => {
     const task = tasks.find((task) => task.id === taskId);
-    if (task && (task.status === 'Todo' || task.status === 'Working')) {
-      if (confirm('Tem certeza que deseja deletar esta tarefa?')) {
+    if (task && (task.status === "Todo" || task.status === "Working")) {
+      if (confirm("Tem certeza que deseja deletar esta tarefa?")) {
         if (onDeleteTask) {
           onDeleteTask(taskId);
         }
@@ -62,17 +62,21 @@ const TaskCard: React.FC<TaskCardProps> = ({
   const handleDeleteSelectedTasks = () => {
     const deletableTasks = selectedTasks.filter((taskId) => {
       const task = tasks.find((task) => task.id === taskId);
-      return task && (task.status === 'Todo' || task.status === 'Working');
+      return task && (task.status === "Todo" || task.status === "Working");
     });
 
     if (deletableTasks.length > 0) {
-      const confirmed = confirm('Tem certeza que deseja deletar as tarefas selecionadas?');
+      const confirmed = confirm(
+        "Tem certeza que deseja deletar as tarefas selecionadas?"
+      );
       if (confirmed) {
         onDeleteSelectedTasks && onDeleteSelectedTasks(deletableTasks);
         setSelectedTasks([]);
       }
     } else {
-      alert('Nenhuma tarefa selecionada pode ser deletada. Apenas tarefas com status "Todo" ou "Working" podem ser removidas.');
+      alert(
+        'Nenhuma tarefa selecionada pode ser deletada. Apenas tarefas com status "Todo" ou "Working" podem ser removidas.'
+      );
     }
   };
 
@@ -84,20 +88,25 @@ const TaskCard: React.FC<TaskCardProps> = ({
           <p className={styles.noTasks}>No tasks available</p>
         ) : (
           tasks.map((task) => (
-            <div key={task.id} className={`${styles.task} ${styles[task.status.toLowerCase()]}`}>
+            <div
+              key={task.id}
+              className={`${styles.task} ${styles[task.status.toLowerCase()]}`}
+            >
               <div className={styles.taskContent}>
                 <input
                   type="checkbox"
                   checked={selectedTasks.includes(task.id)}
                   onChange={() => handleSelectTask(task.id)}
                   className={styles.checkbox}
-                  disabled={task.status === 'Done'}
+                  disabled={task.status === "Done"}
                 />
                 {editTaskId === task.id ? (
                   <input
                     type="text"
                     value={editTaskTitle}
-                    onChange={(e: ChangeEvent<HTMLInputElement>) => setEditTaskTitle(e.target.value)}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                      setEditTaskTitle(e.target.value)
+                    }
                     className={styles.taskInputInline}
                     autoFocus
                   />
@@ -107,20 +116,47 @@ const TaskCard: React.FC<TaskCardProps> = ({
               </div>
               <div className={styles.buttonContainer}>
                 {editTaskId === task.id ? (
-                  <button onClick={handleSaveEdit} className={styles.saveButton}>Save</button>
+                  <button
+                    onClick={handleSaveEdit}
+                    className={styles.saveButton}
+                  >
+                    Save
+                  </button>
                 ) : (
                   <>
-                      {task.status !== 'Done' && (
-                        <button onClick={() => handleDeleteTask(task.id)} className={styles.deleteButton}>Delete</button>
-                      )}
-                    {task.status === 'Todo' && (
-                      <button onClick={() => handleEditTask(task)} className={styles.editButton}>Edit</button>
+                    {task.status !== "Done" && (
+                      <button
+                        onClick={() => handleDeleteTask(task.id)}
+                        className={styles.deleteButton}
+                      >
+                        Delete
+                      </button>
                     )}
-                    {task.status === 'Todo' && (
-                      <button onClick={() => onStartTask && onStartTask(task.id)} className={styles.startButton}>Start</button>
+                    {task.status === "Todo" && (
+                      <button
+                        onClick={() => handleEditTask(task)}
+                        className={styles.editButton}
+                      >
+                        Edit
+                      </button>
                     )}
-                    {task.status === 'Working' && (
-                      <button onClick={() => onCompleteTask && onCompleteTask(task.id)} className={styles.completeButton}>Complete</button>
+                    {task.status === "Todo" && (
+                      <button
+                        onClick={() => onStartTask && onStartTask(task.id)}
+                        className={styles.startButton}
+                      >
+                        Start
+                      </button>
+                    )}
+                    {task.status === "Working" && (
+                      <button
+                        onClick={() =>
+                          onCompleteTask && onCompleteTask(task.id)
+                        }
+                        className={styles.completeButton}
+                      >
+                        Complete
+                      </button>
                     )}
                   </>
                 )}
@@ -138,7 +174,7 @@ const TaskCard: React.FC<TaskCardProps> = ({
             onChange={(e) => setTaskInput(e.target.value)}
             className={styles.taskInput}
             onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-              if (e.key === 'Enter') {
+              if (e.key === "Enter") {
                 handleAddTask();
               }
             }}
@@ -148,11 +184,13 @@ const TaskCard: React.FC<TaskCardProps> = ({
       )}
       <Button
         onClick={handleDeleteSelectedTasks}
-        className={`${styles.deleteAllButton} ${selectedTasks.length === 0 ? styles.disabled : ''}`}
+        className={`${styles.deleteAllButton} ${
+          selectedTasks.length === 0 ? styles.disabled : ""
+        }`}
         disabled={selectedTasks.length === 0}
-        titleButton='Delete Selected Tasks'
+        titleButton="Delete Selected Tasks"
       />
-      
+
       {errorMessage && (
         <div className={styles.errorMessage}>{errorMessage}</div>
       )}
