@@ -182,6 +182,9 @@ const TaskCard: React.FC<TaskCardProps> = ({
           <Button onClick={handleAddTask} titleButton="Add" />
         </div>
       )}
+      {errorMessage && (
+        <div className={styles.errorMessage}>{errorMessage}</div>
+      )}
       <Button
         onClick={handleDeleteSelectedTasks}
         className={`${styles.deleteAllButton} ${
@@ -190,10 +193,6 @@ const TaskCard: React.FC<TaskCardProps> = ({
         disabled={selectedTasks.length === 0}
         titleButton="Delete Selected Tasks"
       />
-
-      {errorMessage && (
-        <div className={styles.errorMessage}>{errorMessage}</div>
-      )}
     </div>
   );
 };
