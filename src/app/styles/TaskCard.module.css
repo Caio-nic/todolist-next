@@ -18,7 +18,7 @@
 .title {
   font-size: 1.6em;
   margin: 0;
-  padding: 10px;
+  padding: 10px;  
   border-radius: 6px;
   color: #000000;
   margin-bottom: 20px;
@@ -217,3 +217,16 @@
   color: white; 
 }
 
+.disabled {
+  opacity: 0.5; /* Reduz a opacidade para indicar desabilitado */
+  cursor: not-allowed; /* Alterar o cursor para indicar que não pode ser clicado */
+  background-color: #666866; /* Cor de fundo para botões desabilitados */
+  color: #ffffff; /* Cor do texto para botões desabilitados */
+}
+
+
+.checkbox:disabled {
+  background-color: #a85656; /* Cor de fundo diferente para checkbox desabilitado */
+  border: 1px solid #ccc; /* Cor da borda para checkbox desabilitado */
+  cursor: not-allowed; /* Indicar que não pode ser interagido */
+}

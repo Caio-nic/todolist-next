@@ -1,29 +1,24 @@
 import React, { useState } from 'react';
 import TaskCard from './TaskCard';
-
-interface Task {
-  id: number;
-  title: string;
-  status: 'Todo' | 'Working' | 'Done';
-}
+import { Task } from '../../types';
 
 const TaskManager: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const addTask = (title: string) => {
-    if (title.length < 5 || title.length > 30) {
+  const addTask = (taskTitle: string) => {
+    if (taskTitle.length < 5 || taskTitle.length > 30) {
       setErrorMessage('A tarefa deve ter entre 5 e 30 caracteres.');
       return;
     }
 
     const newTask: Task = {
       id: Date.now(),
-      title,
+      title: taskTitle,
       status: 'Todo',
     };
 
-    setTasks(prevTasks => [...prevTasks, newTask]);
+    setTasks([...tasks, newTask]);
     setErrorMessage(null);
   };
 
@@ -43,6 +38,30 @@ const TaskManager: React.FC = () => {
     );
   };
 
+  const deleteTask = (taskId: number) => {
+    const task = tasks.find((task) => task.id === taskId);
+    if (task && (task.status === 'Todo' || task.status === 'Working')) {
+      setTasks(prevTasks => prevTasks.filter(task => task.id !== taskId));
+    } else {
+      alert('Você só pode deletar tarefas com status "Todo" ou "Working".');
+    }
+  };
+
+  const deleteSelectedTasks = (taskIds: number[]) => {
+    const deletableTasks = taskIds.filter((taskId) => {
+      const task = tasks.find((task) => task.id === taskId);
+      return task && (task.status === 'Todo' || task.status === 'Working');
+    });
+
+    if (deletableTasks.length > 0) {
+      if (confirm(`Tem certeza que deseja deletar as tarefas selecionadas?`)) {
+        setTasks(prevTasks => prevTasks.filter(task => !deletableTasks.includes(task.id)));
+      }
+    } else {
+      alert('Nenhuma tarefa selecionada pode ser deletada. Apenas tarefas com status "Todo" ou "Working" podem ser removidas.');
+    }
+  };
+
   const editTask = (taskId: number, newTitle: string) => {
     setTasks(prevTasks =>
       prevTasks.map(task =>
@@ -51,24 +70,21 @@ const TaskManager: React.FC = () => {
     );
   };
 
-  const deleteSelectedTasks = (taskIds: number[]) => {
-    setTasks(prevTasks => prevTasks.filter(task => !taskIds.includes(task.id))); // Remove as tarefas selecionadas
-  };
-
   return (
-    <>
+    <div>
       <TaskCard
-        title="Tasks"
+        title="Task Manager"
         tasks={tasks}
         canAddTask={true}
         onAddTask={addTask}
         onStartTask={startTask}
         onCompleteTask={completeTask}
         onEditTask={editTask}
-        onDeleteSelectedTasks={deleteSelectedTasks} // Passando a função para deletar tarefas selecionadas
+        onDeleteTask={deleteTask}
+        onDeleteSelectedTasks={deleteSelectedTasks}
         errorMessage={errorMessage}
       />
-    </>
+    </div>
   );
 };
 
